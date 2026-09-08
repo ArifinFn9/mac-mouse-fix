@@ -27,9 +27,12 @@ jobs:
             -scheme "App - Release" \
             -configuration Release \
             -derivedDataPath build \
+            -destination "generic/platform=macOS" \
+            CODE_SIGN_STYLE="Manual" \
             CODE_SIGN_IDENTITY="-" \
+            DEVELOPMENT_TEAM="" \
             CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_ALLOWED=YES \
             build
 
       - name: Package App into Zip
