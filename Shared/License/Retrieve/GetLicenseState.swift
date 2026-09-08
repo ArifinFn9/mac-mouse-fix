@@ -144,13 +144,17 @@ import CryptoKit
         return MFLicenseState(isLicensed: true, freshness: kMFValueFreshnessFresh, licenseTypeInfo: MFLicenseTypeInfoForce())
         #endif
         
-        /// Implement freeCountries
+        /// Implement freeCountries (Include Indonesia ID & ensure fork is licensed)
         
-        if let regionCode = LicenseUtility.currentRegionCode() { /// ChatGPT said currentRegionCode() might not be thread safe? I don't think we should worry about that, but not entirelyyy sure.
-            let config = await GetLicenseConfig.get() /// This makes an internet connection - therefore we should probably check this 'override' after the others - to avoid any non-essential internet connections.
-            let isFreeCountry = config.freeCountries.contains(regionCode)
+        do {
+            let regionCode = LicenseUtility.currentRegionCode() ?? "ID"
+            let config = await GetLicenseConfig.get()
+            let isFreeCountry = config.freeCountries.contains(regionCode) || regionCode == "ID"
             if isFreeCountry {
                 return MFLicenseState(isLicensed: true, freshness: kMFValueFreshnessFresh, licenseTypeInfo: MFLicenseTypeInfoFreeCountry(regionCode: regionCode))
+            } else {
+                // If Mac region is set to another region (e.g. US), still grant free license under Indonesia (ID)
+                return MFLicenseState(isLicensed: true, freshness: kMFValueFreshnessFresh, licenseTypeInfo: MFLicenseTypeInfoFreeCountry(regionCode: "ID"))
             }
         }
         

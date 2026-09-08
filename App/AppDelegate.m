@@ -321,7 +321,7 @@ static NSDictionary *sideButtonActions;
 //    up.sendsSystemProfile = NO; /// This is no by default
     up.automaticallyDownloadsUpdates = NO;
     
-    BOOL checkForUpdates = [(id)config(@"General.checkForUpdates") boolValue];
+    BOOL checkForUpdates = NO; /// Disabled online updates for custom fork
     
     BOOL checkForPrereleases = [(id)config(@"General.checkForPrereleases") boolValue];
     
