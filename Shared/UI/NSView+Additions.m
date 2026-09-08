@@ -11,7 +11,20 @@
 #import "NSArray+Additions.h"
 #import "SharedUtility.h"
 
+#import <objc/runtime.h>
+
 @implementation NSView (Additions)
+
+static const void *kPrefersCompactControlSizeMetricsKey = &kPrefersCompactControlSizeMetricsKey;
+
+- (BOOL)prefersCompactControlSizeMetrics {
+    NSNumber *val = objc_getAssociatedObject(self, kPrefersCompactControlSizeMetricsKey);
+    return val ? [val boolValue] : NO;
+}
+
+- (void)setPrefersCompactControlSizeMetrics:(BOOL)prefersCompactControlSizeMetrics {
+    objc_setAssociatedObject(self, kPrefersCompactControlSizeMetricsKey, @(prefersCompactControlSizeMetrics), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
 
 #pragma mark - Frame conversion
 
